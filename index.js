@@ -62,7 +62,7 @@ app.listen(PORT, () => console.log("Server start"));
     // let feed = await parser.parseURL('https://www.reddit.com/.rss');
     let feed = await parser.parseURL('https://habr.com/rss/all/all/');
     // console.log(feed);
-    console.log(feed.items.length);
+    // console.log(feed.items.length);
     // console.log(feed.title);
     // console.log(feed.pubDate);
     // console.log(feed.lastBuildDate);
@@ -84,8 +84,26 @@ app.listen(PORT, () => console.log("Server start"));
     const tags = ["js", "javascript", "react", "reactjs", "redux", "next", "nextjs", "vue", "vuejs", "vuex", "nuxt", "nuxtjs", "angular", "angularjs", "rxjs", "node", "nodejs", "express", "expressjs", "mongo", "mongodb", "mongoose", "html", "html5", "css", "css3", "git", "github"];
 
     feed.items.forEach(item => {
+        // tags.some((tag, i) => {
+        //     if (item.title.toLowerCase().includes(tag) || item.contentSnippet.toLowerCase().includes(tag)) { // так ищет любое вхождение в том числе и например находит "git" в "digital", что нам не нужно, нам нужен имеено git и только
+        //         let article = createArticle(item);
+
+        //         // пробная версия ещё не тестировал, нужно дописать переписать, исключить дубли
+        //         tags.forEach(tag => {
+        //             if (item.title.toLowerCase().includes(tag) || item.contentSnippet.toLowerCase().includes(tag)) {
+        //                 article.tags.push(`#${tag}`);
+        //             }
+        //         });
+
+        //         store.push(article);
+        //         return true;
+        //     }
+        // });
+
+
         tags.some((tag, i) => {
-            if (item.title.toLowerCase().includes(tag) || item.contentSnippet.toLowerCase().includes(tag)) {
+            let reqexp = new RegExp(`\\b${tag}\\b`, "i"); // /\b${tag}\b/i, \b - allows you to perform a "whole words only" search
+            if (reqexp.test(item.title.toLowerCase()) || reqexp.test(item.contentSnippet.toLowerCase())) {
                 let article = createArticle(item);
 
                 // пробная версия ещё не тестировал, нужно дописать переписать, исключить дубли
@@ -121,6 +139,7 @@ app.listen(PORT, () => console.log("Server start"));
         // store.push(article);
     });
     console.log("store :", store);
+    console.log("store.length :", store.length);
 
     // REDIS example
     // redis.debug_mode = true;
@@ -155,6 +174,7 @@ app.listen(PORT, () => console.log("Server start"));
     //     let markdown = `*${article.title}.*\n\n${article.link}\n\n${tags}`;
     //     bot.sendMessage(CHAT_ID, markdown, { parse_mode: "Markdown" })
     // });
+
 
     let delay = 5000;
     store.forEach((article, i) => {
