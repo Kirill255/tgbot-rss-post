@@ -5,6 +5,7 @@ module.exports = {
     TOKEN: process.env.TOKEN,
     PROXY: process.env.PROXY,
     CHAT_ID: process.env.CHAT_ID,
+    CHAT_USERNAME: process.env.CHAT_USERNAME,
     REDIS_HOST: process.env.REDIS_HOST,
     REDIS_PORT: process.env.REDIS_PORT,
     REDIS_PASSWORD: process.env.REDIS_PASSWORD
