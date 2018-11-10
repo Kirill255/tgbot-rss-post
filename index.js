@@ -9,8 +9,8 @@ const { fetchData } = require("./fetch_data");
 const { preparePosts } = require("./prepare_posts");
 
 
-const express = require("express");
-const app = express();
+// const express = require("express");
+// const app = express();
 // const fetch = require("node-fetch");
 
 
@@ -26,34 +26,35 @@ const bot = new TelegramBot(TOKEN, {
     },
 });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-    // res.send("GET request to the homepage");
-    res.status(200).end();
-});
+// app.get("/", (req, res) => {
+//     // res.send("GET request to the homepage");
+//     res.status(200).end();
+// });
 
-app.use((req, res, next) => {
-    res.status(404).send("Not found!");
-});
+// app.use((req, res, next) => {
+//     res.status(404).send("Not found!");
+// });
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send("Something broke!");
-});
+// app.use((err, req, res, next) => {
+//     console.error(err.stack);
+//     res.status(500).send("Something broke!");
+// });
 
-app.listen(PORT, () => console.log("Server start"));
+// app.listen(PORT, () => console.log("Server start"));
 
 
+//  запускаем нашу функцию которая парсит сайт и возвращает только новые посты подходящие под наши тэги
 fetchData()
     .then(store => {
-        preparePosts(store)
+        preparePosts(store) // получаем наши посты и подготовливаем для отправки через tgbot
             .then(posts => {
-                console.log('posts :', posts);
+                console.log('posts :', posts); // получаем готовые для отправки через tgbota посты
 
                 let delay = 5000;
-                posts.forEach((post, i) => {
+                posts.forEach((post, i) => { // перебираем циклом посты и отправляем с задержкой
                     setTimeout(() => {
                         bot.sendMessage(CHAT_ID, post.markdown, post.options)
                     }, delay * i);
